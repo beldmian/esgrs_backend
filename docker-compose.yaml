@@ -1,0 +1,38 @@
+version: "3.9"
+
+networks:
+  internal:
+
+services:
+  data_collection_service:
+    build:
+      context: .
+      dockerfile: deploy/data_collection_service.Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - internal
+  data_processing_service:
+    build:
+      context: .
+      dockerfile: deploy/data_processing_service.Dockerfile
+    ports:
+      - "8081:8081"
+    networks:
+      - internal
+  reporting_service:
+    build:
+      context: .
+      dockerfile: deploy/reporting_service.Dockerfile
+    ports:
+      - "8082:8082"
+    networks:
+      - internal
+  visualization_service:
+    build:
+      context: .
+      dockerfile: deploy/visualization_service.Dockerfile
+    ports:
+      - "8083:8083"
+    networks:
+      - internal
