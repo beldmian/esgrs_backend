@@ -5,11 +5,18 @@ package transport
 import types "esgrs/pkg/types"
 
 type (
-	CollectDataRequest struct {
+	GetCompanyByIDRequest struct {
+		Id int `json:"id"`
+	}
+	GetCompanyByIDResponse struct {
 		Company types.Company `json:"company"`
 	}
-	CollectDataResponse struct {
-		Data []types.CriteriaData `json:"data"`
+
+	GetRawDataRequest struct {
+		CompanyID int `json:"company_id"`
+	}
+	GetRawDataResponse struct {
+		Data []types.CriteriaRawData `json:"data"`
 	}
 
 	// Formal exchange type, please do not delete.

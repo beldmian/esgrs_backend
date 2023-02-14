@@ -27,23 +27,23 @@ func CommonHTTPResponseEncoder(_ context.Context, w http.ResponseWriter, respons
 	return json.NewEncoder(w).Encode(response)
 }
 
-func _Decode_ProcessData_Request(_ context.Context, r *http.Request) (interface{}, error) {
-	var req transport.ProcessDataRequest
+func _Decode_GetProcessedData_Request(_ context.Context, r *http.Request) (interface{}, error) {
+	var req transport.GetProcessedDataRequest
 	err := json.NewDecoder(r.Body).Decode(&req)
 	return &req, err
 }
 
-func _Decode_ProcessData_Response(_ context.Context, r *http.Response) (interface{}, error) {
-	var resp transport.ProcessDataResponse
+func _Decode_GetProcessedData_Response(_ context.Context, r *http.Response) (interface{}, error) {
+	var resp transport.GetProcessedDataResponse
 	err := json.NewDecoder(r.Body).Decode(&resp)
 	return &resp, err
 }
 
-func _Encode_ProcessData_Request(ctx context.Context, r *http.Request, request interface{}) error {
-	r.URL.Path = path.Join(r.URL.Path, "process-data")
+func _Encode_GetProcessedData_Request(ctx context.Context, r *http.Request, request interface{}) error {
+	r.URL.Path = path.Join(r.URL.Path, "get-processed-data")
 	return CommonHTTPRequestEncoder(ctx, r, request)
 }
 
-func _Encode_ProcessData_Response(ctx context.Context, w http.ResponseWriter, response interface{}) error {
+func _Encode_GetProcessedData_Response(ctx context.Context, w http.ResponseWriter, response interface{}) error {
 	return CommonHTTPResponseEncoder(ctx, w, response)
 }

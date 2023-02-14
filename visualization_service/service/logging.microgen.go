@@ -25,12 +25,12 @@ type loggingMiddleware struct {
 	next   service.VisualizationService
 }
 
-func (M loggingMiddleware) GenerateVisualization(arg0 context.Context, arg1 types.ESGRatingResult) (res0 types.Visualization, res1 error) {
+func (M loggingMiddleware) GenerateVisualization(arg0 context.Context, arg1 int) (res0 types.Visualization, res1 error) {
 	defer func(begin time.Time) {
 		M.logger.Log(
 			"method", "GenerateVisualization",
 			"message", "GenerateVisualization called",
-			"request", logGenerateVisualizationRequest{Result: arg1},
+			"request", logGenerateVisualizationRequest{CompanyID: arg1},
 			"response", logGenerateVisualizationResponse{Vis: res0},
 			"err", res1,
 			"took", time.Since(begin))
@@ -40,7 +40,7 @@ func (M loggingMiddleware) GenerateVisualization(arg0 context.Context, arg1 type
 
 type (
 	logGenerateVisualizationRequest struct {
-		Result types.ESGRatingResult
+		CompanyID int
 	}
 	logGenerateVisualizationResponse struct {
 		Vis types.Visualization

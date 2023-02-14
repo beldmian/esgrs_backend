@@ -11,18 +11,18 @@ import (
 )
 
 func Endpoints(svc dataprocessingservice.DataProcessingService) EndpointsSet {
-	return EndpointsSet{ProcessDataEndpoint: ProcessDataEndpoint(svc)}
+	return EndpointsSet{GetProcessedDataEndpoint: GetProcessedDataEndpoint(svc)}
 }
 
 // TraceServerEndpoints is used for tracing endpoints on server side.
 func TraceServerEndpoints(endpoints EndpointsSet, tracer opentracinggo.Tracer) EndpointsSet {
-	return EndpointsSet{ProcessDataEndpoint: opentracing.TraceServer(tracer, "ProcessData")(endpoints.ProcessDataEndpoint)}
+	return EndpointsSet{GetProcessedDataEndpoint: opentracing.TraceServer(tracer, "GetProcessedData")(endpoints.GetProcessedDataEndpoint)}
 }
 
-func ProcessDataEndpoint(svc dataprocessingservice.DataProcessingService) endpoint.Endpoint {
+func GetProcessedDataEndpoint(svc dataprocessingservice.DataProcessingService) endpoint.Endpoint {
 	return func(arg0 context.Context, request interface{}) (interface{}, error) {
-		req := request.(*ProcessDataRequest)
-		res0, res1 := svc.ProcessData(arg0, req.Data)
-		return &ProcessDataResponse{Result: res0}, res1
+		req := request.(*GetProcessedDataRequest)
+		res0, res1 := svc.GetProcessedData(arg0, req.CompanyID)
+		return &GetProcessedDataResponse{Result: res0}, res1
 	}
 }

@@ -6,7 +6,7 @@ import types "esgrs/pkg/types"
 
 type (
 	GenerateVisualizationRequest struct {
-		Result types.ESGRatingResult `json:"result"`
+		CompanyID int `json:"company_id"`
 	}
 	GenerateVisualizationResponse struct {
 		Vis types.Visualization `json:"vis"`

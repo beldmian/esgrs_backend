@@ -24,11 +24,11 @@ type errorLoggingMiddleware struct {
 	next   service.DataProcessingService
 }
 
-func (M errorLoggingMiddleware) ProcessData(ctx context.Context, data []types.CriteriaData) (result types.ESGRatingResult, err error) {
+func (M errorLoggingMiddleware) GetProcessedData(ctx context.Context, companyID int) (result types.ESGRatingResult, err error) {
 	defer func() {
 		if err != nil {
-			M.logger.Log("method", "ProcessData", "message", err)
+			M.logger.Log("method", "GetProcessedData", "message", err)
 		}
 	}()
-	return M.next.ProcessData(ctx, data)
+	return M.next.GetProcessedData(ctx, companyID)
 }

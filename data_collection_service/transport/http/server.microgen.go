@@ -14,13 +14,20 @@ import (
 
 func NewHTTPHandler(endpoints *transport.EndpointsSet, logger log.Logger, tracer opentracinggo.Tracer, opts ...http.ServerOption) http1.Handler {
 	mux := mux.NewRouter()
-	mux.Methods("POST").Path("/collect-data").Handler(
+	mux.Methods("POST").Path("/get-company-byid").Handler(
 		http.NewServer(
-			endpoints.CollectDataEndpoint,
-			_Decode_CollectData_Request,
-			_Encode_CollectData_Response,
+			endpoints.GetCompanyByIDEndpoint,
+			_Decode_GetCompanyByID_Request,
+			_Encode_GetCompanyByID_Response,
 			append(opts, http.ServerBefore(
-				opentracing.HTTPToContext(tracer, "CollectData", logger)))...))
+				opentracing.HTTPToContext(tracer, "GetCompanyByID", logger)))...))
+	mux.Methods("POST").Path("/get-raw-data").Handler(
+		http.NewServer(
+			endpoints.GetRawDataEndpoint,
+			_Decode_GetRawData_Request,
+			_Encode_GetRawData_Response,
+			append(opts, http.ServerBefore(
+				opentracing.HTTPToContext(tracer, "GetRawData", logger)))...))
 	mux.Methods("POST").Path("/get-company-list").Handler(
 		http.NewServer(
 			endpoints.GetCompanyListEndpoint,

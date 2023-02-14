@@ -12,10 +12,10 @@ import (
 )
 
 func NewHTTPClient(u *url.URL, opts ...httpkit.ClientOption) transport.EndpointsSet {
-	return transport.EndpointsSet{ProcessDataEndpoint: httpkit.NewClient(
+	return transport.EndpointsSet{GetProcessedDataEndpoint: httpkit.NewClient(
 		"POST", u,
-		_Encode_ProcessData_Request,
-		_Decode_ProcessData_Response,
+		_Encode_GetProcessedData_Request,
+		_Decode_GetProcessedData_Response,
 		opts...,
 	).Endpoint()}
 }

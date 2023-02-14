@@ -9,5 +9,5 @@ import (
 // @microgen middleware, logging, tracing, metrics, recovering, error-logging, http
 type VisualizationService interface {
 	// GenerateVisualization accepts the resultset of ESGRatingResult to generate a visualization
-	GenerateVisualization(ctx context.Context, result types.ESGRatingResult) (vis types.Visualization, err error)
+	GenerateVisualization(ctx context.Context, companyID int) (vis types.Visualization, err error)
 }

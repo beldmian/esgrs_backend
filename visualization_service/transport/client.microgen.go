@@ -14,8 +14,8 @@ func TraceClientEndpoints(endpoints EndpointsSet, tracer opentracinggo.Tracer) E
 	return EndpointsSet{GenerateVisualizationEndpoint: opentracing.TraceClient(tracer, "GenerateVisualization")(endpoints.GenerateVisualizationEndpoint)}
 }
 
-func (set EndpointsSet) GenerateVisualization(arg0 context.Context, arg1 types.ESGRatingResult) (res0 types.Visualization, res1 error) {
-	request := GenerateVisualizationRequest{Result: arg1}
+func (set EndpointsSet) GenerateVisualization(arg0 context.Context, arg1 int) (res0 types.Visualization, res1 error) {
+	request := GenerateVisualizationRequest{CompanyID: arg1}
 	response, res1 := set.GenerateVisualizationEndpoint(arg0, &request)
 	if res1 != nil {
 		return

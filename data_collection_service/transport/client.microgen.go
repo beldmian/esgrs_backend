@@ -12,18 +12,28 @@ import (
 // TraceClientEndpoints is used for tracing endpoints on client side.
 func TraceClientEndpoints(endpoints EndpointsSet, tracer opentracinggo.Tracer) EndpointsSet {
 	return EndpointsSet{
-		CollectDataEndpoint:    opentracing.TraceClient(tracer, "CollectData")(endpoints.CollectDataEndpoint),
+		GetCompanyByIDEndpoint: opentracing.TraceClient(tracer, "GetCompanyByID")(endpoints.GetCompanyByIDEndpoint),
 		GetCompanyListEndpoint: opentracing.TraceClient(tracer, "GetCompanyList")(endpoints.GetCompanyListEndpoint),
+		GetRawDataEndpoint:     opentracing.TraceClient(tracer, "GetRawData")(endpoints.GetRawDataEndpoint),
 	}
 }
 
-func (set EndpointsSet) CollectData(arg0 context.Context, arg1 types.Company) (res0 []types.CriteriaData, res1 error) {
-	request := CollectDataRequest{Company: arg1}
-	response, res1 := set.CollectDataEndpoint(arg0, &request)
+func (set EndpointsSet) GetCompanyByID(arg0 context.Context, arg1 int) (res0 types.Company, res1 error) {
+	request := GetCompanyByIDRequest{Id: arg1}
+	response, res1 := set.GetCompanyByIDEndpoint(arg0, &request)
 	if res1 != nil {
 		return
 	}
-	return response.(*CollectDataResponse).Data, res1
+	return response.(*GetCompanyByIDResponse).Company, res1
+}
+
+func (set EndpointsSet) GetRawData(arg0 context.Context, arg1 int) (res0 []types.CriteriaRawData, res1 error) {
+	request := GetRawDataRequest{CompanyID: arg1}
+	response, res1 := set.GetRawDataEndpoint(arg0, &request)
+	if res1 != nil {
+		return
+	}
+	return response.(*GetRawDataResponse).Data, res1
 }
 
 func (set EndpointsSet) GetCompanyList(arg0 context.Context) (res0 []types.Company, res1 error) {

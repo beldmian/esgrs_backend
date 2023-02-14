@@ -25,12 +25,12 @@ type recoveringMiddleware struct {
 	next   service.DataProcessingService
 }
 
-func (M recoveringMiddleware) ProcessData(ctx context.Context, data []types.CriteriaData) (result types.ESGRatingResult, err error) {
+func (M recoveringMiddleware) GetProcessedData(ctx context.Context, companyID int) (result types.ESGRatingResult, err error) {
 	defer func() {
 		if r := recover(); r != nil {
-			M.logger.Log("method", "ProcessData", "message", r)
+			M.logger.Log("method", "GetProcessedData", "message", r)
 			err = fmt.Errorf("%v", r)
 		}
 	}()
-	return M.next.ProcessData(ctx, data)
+	return M.next.GetProcessedData(ctx, companyID)
 }

@@ -20,11 +20,11 @@ type ManyToManyStreamEndpoint func(stream interface{}) error
 type ManyToOneStreamEndpoint func(stream interface{}) error
 
 type EndpointsSet struct {
-	ProcessDataEndpoint endpoint.Endpoint
+	GetProcessedDataEndpoint endpoint.Endpoint
 }
 
 func InstrumentingEndpoints(endpoints EndpointsSet, tracer opentracinggo.Tracer) EndpointsSet {
-	return EndpointsSet{ProcessDataEndpoint: opentracing.TraceServer(tracer, "ProcessData")(endpoints.ProcessDataEndpoint)}
+	return EndpointsSet{GetProcessedDataEndpoint: opentracing.TraceServer(tracer, "GetProcessedData")(endpoints.GetProcessedDataEndpoint)}
 }
 
 func LatencyMiddleware(dur metrics.Histogram, methodName string) endpoint.Middleware {

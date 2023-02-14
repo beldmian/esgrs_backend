@@ -6,8 +6,7 @@ WORKDIR /app/src
 COPY go.mod .
 COPY go.sum .
 RUN go mod download
-COPY ./reporting_service ./reporting_service
-COPY ./pkg ./pkg
+COPY . .
 RUN go build -o main ./reporting_service/cmd/reporting_service
 
 FROM alpine:3.7

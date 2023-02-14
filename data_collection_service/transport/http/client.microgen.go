@@ -13,16 +13,22 @@ import (
 
 func NewHTTPClient(u *url.URL, opts ...httpkit.ClientOption) transport.EndpointsSet {
 	return transport.EndpointsSet{
-		CollectDataEndpoint: httpkit.NewClient(
+		GetCompanyByIDEndpoint: httpkit.NewClient(
 			"POST", u,
-			_Encode_CollectData_Request,
-			_Decode_CollectData_Response,
+			_Encode_GetCompanyByID_Request,
+			_Decode_GetCompanyByID_Response,
 			opts...,
 		).Endpoint(),
 		GetCompanyListEndpoint: httpkit.NewClient(
 			"POST", u,
 			_Encode_GetCompanyList_Request,
 			_Decode_GetCompanyList_Response,
+			opts...,
+		).Endpoint(),
+		GetRawDataEndpoint: httpkit.NewClient(
+			"POST", u,
+			_Encode_GetRawData_Request,
+			_Decode_GetRawData_Response,
 			opts...,
 		).Endpoint(),
 	}

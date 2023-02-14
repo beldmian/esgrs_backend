@@ -5,10 +5,10 @@ package transport
 import types "esgrs/pkg/types"
 
 type (
-	ProcessDataRequest struct {
-		Data []types.CriteriaData `json:"data"`
+	GetProcessedDataRequest struct {
+		CompanyID int `json:"company_id"`
 	}
-	ProcessDataResponse struct {
+	GetProcessedDataResponse struct {
 		Result types.ESGRatingResult `json:"result"`
 	}
 )

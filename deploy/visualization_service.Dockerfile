@@ -6,8 +6,7 @@ WORKDIR /app/src
 COPY go.mod .
 COPY go.sum .
 RUN go mod download
-COPY ./visualization_service ./visualization_service
-COPY ./pkg ./pkg
+COPY . .
 RUN go build -o main ./visualization_service/cmd/visualization_service
 
 FROM alpine:3.7

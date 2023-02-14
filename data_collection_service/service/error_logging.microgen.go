@@ -24,13 +24,22 @@ type errorLoggingMiddleware struct {
 	next   service.DataCollectionService
 }
 
-func (M errorLoggingMiddleware) CollectData(ctx context.Context, company types.Company) (data []types.CriteriaData, err error) {
+func (M errorLoggingMiddleware) GetCompanyByID(ctx context.Context, id int) (company types.Company, err error) {
 	defer func() {
 		if err != nil {
-			M.logger.Log("method", "CollectData", "message", err)
+			M.logger.Log("method", "GetCompanyByID", "message", err)
 		}
 	}()
-	return M.next.CollectData(ctx, company)
+	return M.next.GetCompanyByID(ctx, id)
+}
+
+func (M errorLoggingMiddleware) GetRawData(ctx context.Context, companyID int) (data []types.CriteriaRawData, err error) {
+	defer func() {
+		if err != nil {
+			M.logger.Log("method", "GetRawData", "message", err)
+		}
+	}()
+	return M.next.GetRawData(ctx, companyID)
 }
 
 func (M errorLoggingMiddleware) GetCompanyList(ctx context.Context) (companies []types.Company, err error) {

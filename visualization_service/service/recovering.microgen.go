@@ -25,12 +25,12 @@ type recoveringMiddleware struct {
 	next   service.VisualizationService
 }
 
-func (M recoveringMiddleware) GenerateVisualization(ctx context.Context, result types.ESGRatingResult) (vis types.Visualization, err error) {
+func (M recoveringMiddleware) GenerateVisualization(ctx context.Context, companyID int) (vis types.Visualization, err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			M.logger.Log("method", "GenerateVisualization", "message", r)
 			err = fmt.Errorf("%v", r)
 		}
 	}()
-	return M.next.GenerateVisualization(ctx, result)
+	return M.next.GenerateVisualization(ctx, companyID)
 }

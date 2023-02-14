@@ -25,24 +25,24 @@ type loggingMiddleware struct {
 	next   service.DataProcessingService
 }
 
-func (M loggingMiddleware) ProcessData(arg0 context.Context, arg1 []types.CriteriaData) (res0 types.ESGRatingResult, res1 error) {
+func (M loggingMiddleware) GetProcessedData(arg0 context.Context, arg1 int) (res0 types.ESGRatingResult, res1 error) {
 	defer func(begin time.Time) {
 		M.logger.Log(
-			"method", "ProcessData",
-			"message", "ProcessData called",
-			"request", logProcessDataRequest{Data: arg1},
-			"response", logProcessDataResponse{Result: res0},
+			"method", "GetProcessedData",
+			"message", "GetProcessedData called",
+			"request", logGetProcessedDataRequest{CompanyID: arg1},
+			"response", logGetProcessedDataResponse{Result: res0},
 			"err", res1,
 			"took", time.Since(begin))
 	}(time.Now())
-	return M.next.ProcessData(arg0, arg1)
+	return M.next.GetProcessedData(arg0, arg1)
 }
 
 type (
-	logProcessDataRequest struct {
-		Data []types.CriteriaData
+	logGetProcessedDataRequest struct {
+		CompanyID int
 	}
-	logProcessDataResponse struct {
+	logGetProcessedDataResponse struct {
 		Result types.ESGRatingResult
 	}
 )

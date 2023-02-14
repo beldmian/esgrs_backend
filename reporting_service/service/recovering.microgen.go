@@ -25,12 +25,12 @@ type recoveringMiddleware struct {
 	next   service.ReportingService
 }
 
-func (M recoveringMiddleware) GenerateReport(ctx context.Context, result types.ESGRatingResult) (rep types.Report, err error) {
+func (M recoveringMiddleware) GenerateReport(ctx context.Context, companyID int) (rep types.Report, err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			M.logger.Log("method", "GenerateReport", "message", r)
 			err = fmt.Errorf("%v", r)
 		}
 	}()
-	return M.next.GenerateReport(ctx, result)
+	return M.next.GenerateReport(ctx, companyID)
 }

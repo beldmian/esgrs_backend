@@ -22,7 +22,7 @@ func TraceServerEndpoints(endpoints EndpointsSet, tracer opentracinggo.Tracer) E
 func GenerateReportEndpoint(svc reportingservice.ReportingService) endpoint.Endpoint {
 	return func(arg0 context.Context, request interface{}) (interface{}, error) {
 		req := request.(*GenerateReportRequest)
-		res0, res1 := svc.GenerateReport(arg0, req.Result)
+		res0, res1 := svc.GenerateReport(arg0, req.CompanyID)
 		return &GenerateReportResponse{Rep: res0}, res1
 	}
 }

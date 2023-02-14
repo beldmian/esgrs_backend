@@ -11,14 +11,14 @@ import (
 
 // TraceClientEndpoints is used for tracing endpoints on client side.
 func TraceClientEndpoints(endpoints EndpointsSet, tracer opentracinggo.Tracer) EndpointsSet {
-	return EndpointsSet{ProcessDataEndpoint: opentracing.TraceClient(tracer, "ProcessData")(endpoints.ProcessDataEndpoint)}
+	return EndpointsSet{GetProcessedDataEndpoint: opentracing.TraceClient(tracer, "GetProcessedData")(endpoints.GetProcessedDataEndpoint)}
 }
 
-func (set EndpointsSet) ProcessData(arg0 context.Context, arg1 []types.CriteriaData) (res0 types.ESGRatingResult, res1 error) {
-	request := ProcessDataRequest{Data: arg1}
-	response, res1 := set.ProcessDataEndpoint(arg0, &request)
+func (set EndpointsSet) GetProcessedData(arg0 context.Context, arg1 int) (res0 types.ESGRatingResult, res1 error) {
+	request := GetProcessedDataRequest{CompanyID: arg1}
+	response, res1 := set.GetProcessedDataEndpoint(arg0, &request)
 	if res1 != nil {
 		return
 	}
-	return response.(*ProcessDataResponse).Result, res1
+	return response.(*GetProcessedDataResponse).Result, res1
 }

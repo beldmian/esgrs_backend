@@ -14,12 +14,12 @@ import (
 
 func NewHTTPHandler(endpoints *transport.EndpointsSet, logger log.Logger, tracer opentracinggo.Tracer, opts ...http.ServerOption) http1.Handler {
 	mux := mux.NewRouter()
-	mux.Methods("POST").Path("/process-data").Handler(
+	mux.Methods("POST").Path("/get-processed-data").Handler(
 		http.NewServer(
-			endpoints.ProcessDataEndpoint,
-			_Decode_ProcessData_Request,
-			_Encode_ProcessData_Response,
+			endpoints.GetProcessedDataEndpoint,
+			_Decode_GetProcessedData_Request,
+			_Encode_GetProcessedData_Response,
 			append(opts, http.ServerBefore(
-				opentracing.HTTPToContext(tracer, "ProcessData", logger)))...))
+				opentracing.HTTPToContext(tracer, "GetProcessedData", logger)))...))
 	return mux
 }

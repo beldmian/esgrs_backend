@@ -7,7 +7,7 @@ import (
 
 type ReportingServiceImplementation struct{}
 
-func (svc ReportingServiceImplementation) GenerateReport(ctx context.Context, result types.ESGRatingResult) (rep types.Report, err error) {
+func (svc ReportingServiceImplementation) GenerateReport(ctx context.Context, companyID int) (rep types.Report, err error) {
 	//TODO implement me
 	panic("implement me")
 }

@@ -25,17 +25,30 @@ type loggingMiddleware struct {
 	next   service.DataCollectionService
 }
 
-func (M loggingMiddleware) CollectData(arg0 context.Context, arg1 types.Company) (res0 []types.CriteriaData, res1 error) {
+func (M loggingMiddleware) GetCompanyByID(arg0 context.Context, arg1 int) (res0 types.Company, res1 error) {
 	defer func(begin time.Time) {
 		M.logger.Log(
-			"method", "CollectData",
-			"message", "CollectData called",
-			"request", logCollectDataRequest{Company: arg1},
-			"response", logCollectDataResponse{Data: res0},
+			"method", "GetCompanyByID",
+			"message", "GetCompanyByID called",
+			"request", logGetCompanyByIDRequest{Id: arg1},
+			"response", logGetCompanyByIDResponse{Company: res0},
 			"err", res1,
 			"took", time.Since(begin))
 	}(time.Now())
-	return M.next.CollectData(arg0, arg1)
+	return M.next.GetCompanyByID(arg0, arg1)
+}
+
+func (M loggingMiddleware) GetRawData(arg0 context.Context, arg1 int) (res0 []types.CriteriaRawData, res1 error) {
+	defer func(begin time.Time) {
+		M.logger.Log(
+			"method", "GetRawData",
+			"message", "GetRawData called",
+			"request", logGetRawDataRequest{CompanyID: arg1},
+			"response", logGetRawDataResponse{Data: res0},
+			"err", res1,
+			"took", time.Since(begin))
+	}(time.Now())
+	return M.next.GetRawData(arg0, arg1)
 }
 
 func (M loggingMiddleware) GetCompanyList(arg0 context.Context) (res0 []types.Company, res1 error) {
@@ -51,11 +64,17 @@ func (M loggingMiddleware) GetCompanyList(arg0 context.Context) (res0 []types.Co
 }
 
 type (
-	logCollectDataRequest struct {
+	logGetCompanyByIDRequest struct {
+		Id int
+	}
+	logGetCompanyByIDResponse struct {
 		Company types.Company
 	}
-	logCollectDataResponse struct {
-		Data []types.CriteriaData
+	logGetRawDataRequest struct {
+		CompanyID int
+	}
+	logGetRawDataResponse struct {
+		Data []types.CriteriaRawData
 	}
 	logGetCompanyListResponse struct {
 		Companies []types.Company

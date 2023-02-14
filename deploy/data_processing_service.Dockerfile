@@ -6,8 +6,7 @@ WORKDIR /app/src
 COPY go.mod .
 COPY go.sum .
 RUN go mod download
-COPY ./data_processing_service ./data_processing_service
-COPY ./pkg ./pkg
+COPY . .
 RUN go build -o main ./data_processing_service/cmd/data_processing_service
 
 FROM alpine:3.7

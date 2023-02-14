@@ -20,14 +20,16 @@ type ManyToManyStreamEndpoint func(stream interface{}) error
 type ManyToOneStreamEndpoint func(stream interface{}) error
 
 type EndpointsSet struct {
-	CollectDataEndpoint    endpoint.Endpoint
+	GetCompanyByIDEndpoint endpoint.Endpoint
+	GetRawDataEndpoint     endpoint.Endpoint
 	GetCompanyListEndpoint endpoint.Endpoint
 }
 
 func InstrumentingEndpoints(endpoints EndpointsSet, tracer opentracinggo.Tracer) EndpointsSet {
 	return EndpointsSet{
-		CollectDataEndpoint:    opentracing.TraceServer(tracer, "CollectData")(endpoints.CollectDataEndpoint),
+		GetCompanyByIDEndpoint: opentracing.TraceServer(tracer, "GetCompanyByID")(endpoints.GetCompanyByIDEndpoint),
 		GetCompanyListEndpoint: opentracing.TraceServer(tracer, "GetCompanyList")(endpoints.GetCompanyListEndpoint),
+		GetRawDataEndpoint:     opentracing.TraceServer(tracer, "GetRawData")(endpoints.GetRawDataEndpoint),
 	}
 }
 

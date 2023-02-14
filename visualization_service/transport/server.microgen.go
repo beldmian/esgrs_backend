@@ -22,7 +22,7 @@ func TraceServerEndpoints(endpoints EndpointsSet, tracer opentracinggo.Tracer) E
 func GenerateVisualizationEndpoint(svc visualizationservice.VisualizationService) endpoint.Endpoint {
 	return func(arg0 context.Context, request interface{}) (interface{}, error) {
 		req := request.(*GenerateVisualizationRequest)
-		res0, res1 := svc.GenerateVisualization(arg0, req.Result)
+		res0, res1 := svc.GenerateVisualization(arg0, req.CompanyID)
 		return &GenerateVisualizationResponse{Vis: res0}, res1
 	}
 }

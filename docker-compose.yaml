@@ -5,6 +5,7 @@ networks:
 
 services:
   data_collection_service:
+    container_name: data_collection_service
     build:
       context: .
       dockerfile: deploy/data_collection_service.Dockerfile
@@ -13,6 +14,7 @@ services:
     networks:
       - internal
   data_processing_service:
+    container_name: data_processing_service
     build:
       context: .
       dockerfile: deploy/data_processing_service.Dockerfile
@@ -21,6 +23,7 @@ services:
     networks:
       - internal
   reporting_service:
+    container_name: reporting_service
     build:
       context: .
       dockerfile: deploy/reporting_service.Dockerfile
@@ -29,6 +32,7 @@ services:
     networks:
       - internal
   visualization_service:
+    container_name: visualization_service
     build:
       context: .
       dockerfile: deploy/visualization_service.Dockerfile

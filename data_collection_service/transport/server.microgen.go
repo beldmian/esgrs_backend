@@ -12,24 +12,34 @@ import (
 
 func Endpoints(svc datacollectionservice.DataCollectionService) EndpointsSet {
 	return EndpointsSet{
-		CollectDataEndpoint:    CollectDataEndpoint(svc),
+		GetCompanyByIDEndpoint: GetCompanyByIDEndpoint(svc),
 		GetCompanyListEndpoint: GetCompanyListEndpoint(svc),
+		GetRawDataEndpoint:     GetRawDataEndpoint(svc),
 	}
 }
 
 // TraceServerEndpoints is used for tracing endpoints on server side.
 func TraceServerEndpoints(endpoints EndpointsSet, tracer opentracinggo.Tracer) EndpointsSet {
 	return EndpointsSet{
-		CollectDataEndpoint:    opentracing.TraceServer(tracer, "CollectData")(endpoints.CollectDataEndpoint),
+		GetCompanyByIDEndpoint: opentracing.TraceServer(tracer, "GetCompanyByID")(endpoints.GetCompanyByIDEndpoint),
 		GetCompanyListEndpoint: opentracing.TraceServer(tracer, "GetCompanyList")(endpoints.GetCompanyListEndpoint),
+		GetRawDataEndpoint:     opentracing.TraceServer(tracer, "GetRawData")(endpoints.GetRawDataEndpoint),
 	}
 }
 
-func CollectDataEndpoint(svc datacollectionservice.DataCollectionService) endpoint.Endpoint {
+func GetCompanyByIDEndpoint(svc datacollectionservice.DataCollectionService) endpoint.Endpoint {
 	return func(arg0 context.Context, request interface{}) (interface{}, error) {
-		req := request.(*CollectDataRequest)
-		res0, res1 := svc.CollectData(arg0, req.Company)
-		return &CollectDataResponse{Data: res0}, res1
+		req := request.(*GetCompanyByIDRequest)
+		res0, res1 := svc.GetCompanyByID(arg0, req.Id)
+		return &GetCompanyByIDResponse{Company: res0}, res1
+	}
+}
+
+func GetRawDataEndpoint(svc datacollectionservice.DataCollectionService) endpoint.Endpoint {
+	return func(arg0 context.Context, request interface{}) (interface{}, error) {
+		req := request.(*GetRawDataRequest)
+		res0, res1 := svc.GetRawData(arg0, req.CompanyID)
+		return &GetRawDataResponse{Data: res0}, res1
 	}
 }
 

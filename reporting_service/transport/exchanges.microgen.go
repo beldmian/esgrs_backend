@@ -6,7 +6,7 @@ import types "esgrs/pkg/types"
 
 type (
 	GenerateReportRequest struct {
-		Result types.ESGRatingResult `json:"result"`
+		CompanyID int `json:"company_id"`
 	}
 	GenerateReportResponse struct {
 		Rep types.Report `json:"rep"`

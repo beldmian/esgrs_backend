@@ -6,8 +6,7 @@ WORKDIR /app/src
 COPY go.mod .
 COPY go.sum .
 RUN go mod download
-COPY ./data_collection_service ./data_collection_service
-COPY ./pkg ./pkg
+COPY . .
 RUN go build -o main ./data_collection_service/cmd/data_collection_service
 
 FROM alpine:3.7

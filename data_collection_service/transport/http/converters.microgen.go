@@ -27,8 +27,14 @@ func CommonHTTPResponseEncoder(_ context.Context, w http.ResponseWriter, respons
 	return json.NewEncoder(w).Encode(response)
 }
 
-func _Decode_CollectData_Request(_ context.Context, r *http.Request) (interface{}, error) {
-	var req transport.CollectDataRequest
+func _Decode_GetCompanyByID_Request(_ context.Context, r *http.Request) (interface{}, error) {
+	var req transport.GetCompanyByIDRequest
+	err := json.NewDecoder(r.Body).Decode(&req)
+	return &req, err
+}
+
+func _Decode_GetRawData_Request(_ context.Context, r *http.Request) (interface{}, error) {
+	var req transport.GetRawDataRequest
 	err := json.NewDecoder(r.Body).Decode(&req)
 	return &req, err
 }
@@ -39,8 +45,14 @@ func _Decode_GetCompanyList_Request(_ context.Context, r *http.Request) (interfa
 	return &req, err
 }
 
-func _Decode_CollectData_Response(_ context.Context, r *http.Response) (interface{}, error) {
-	var resp transport.CollectDataResponse
+func _Decode_GetCompanyByID_Response(_ context.Context, r *http.Response) (interface{}, error) {
+	var resp transport.GetCompanyByIDResponse
+	err := json.NewDecoder(r.Body).Decode(&resp)
+	return &resp, err
+}
+
+func _Decode_GetRawData_Response(_ context.Context, r *http.Response) (interface{}, error) {
+	var resp transport.GetRawDataResponse
 	err := json.NewDecoder(r.Body).Decode(&resp)
 	return &resp, err
 }
@@ -51,8 +63,13 @@ func _Decode_GetCompanyList_Response(_ context.Context, r *http.Response) (inter
 	return &resp, err
 }
 
-func _Encode_CollectData_Request(ctx context.Context, r *http.Request, request interface{}) error {
-	r.URL.Path = path.Join(r.URL.Path, "collect-data")
+func _Encode_GetCompanyByID_Request(ctx context.Context, r *http.Request, request interface{}) error {
+	r.URL.Path = path.Join(r.URL.Path, "get-company-byid")
+	return CommonHTTPRequestEncoder(ctx, r, request)
+}
+
+func _Encode_GetRawData_Request(ctx context.Context, r *http.Request, request interface{}) error {
+	r.URL.Path = path.Join(r.URL.Path, "get-raw-data")
 	return CommonHTTPRequestEncoder(ctx, r, request)
 }
 
@@ -61,7 +78,11 @@ func _Encode_GetCompanyList_Request(ctx context.Context, r *http.Request, reques
 	return CommonHTTPRequestEncoder(ctx, r, request)
 }
 
-func _Encode_CollectData_Response(ctx context.Context, w http.ResponseWriter, response interface{}) error {
+func _Encode_GetCompanyByID_Response(ctx context.Context, w http.ResponseWriter, response interface{}) error {
+	return CommonHTTPResponseEncoder(ctx, w, response)
+}
+
+func _Encode_GetRawData_Response(ctx context.Context, w http.ResponseWriter, response interface{}) error {
 	return CommonHTTPResponseEncoder(ctx, w, response)
 }
 

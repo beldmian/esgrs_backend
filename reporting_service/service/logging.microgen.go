@@ -25,12 +25,12 @@ type loggingMiddleware struct {
 	next   service.ReportingService
 }
 
-func (M loggingMiddleware) GenerateReport(arg0 context.Context, arg1 types.ESGRatingResult) (res0 types.Report, res1 error) {
+func (M loggingMiddleware) GenerateReport(arg0 context.Context, arg1 int) (res0 types.Report, res1 error) {
 	defer func(begin time.Time) {
 		M.logger.Log(
 			"method", "GenerateReport",
 			"message", "GenerateReport called",
-			"request", logGenerateReportRequest{Result: arg1},
+			"request", logGenerateReportRequest{CompanyID: arg1},
 			"response", logGenerateReportResponse{Rep: res0},
 			"err", res1,
 			"took", time.Since(begin))
@@ -40,7 +40,7 @@ func (M loggingMiddleware) GenerateReport(arg0 context.Context, arg1 types.ESGRa
 
 type (
 	logGenerateReportRequest struct {
-		Result types.ESGRatingResult
+		CompanyID int
 	}
 	logGenerateReportResponse struct {
 		Rep types.Report
