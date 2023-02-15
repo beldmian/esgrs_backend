@@ -31,8 +31,9 @@ func main() {
 		return InterruptHandler(ctx)
 	})
 
-	var svc dataprocessingservice.DataProcessingService // TODO: = service.NewDataProcessingService () // Create new service.
-	svc = int_service.DataProcessingServiceImplementation{}
+	var svc dataprocessingservice.DataProcessingService
+	svc = int_service.NewDataProcessingServiceImplementation(
+		"host=esgrs_postgres user=esgrs dbname=esgrs sslmode=disable password=12345678")
 	svc = service.LoggingMiddleware(logger)(svc)         // Setup service logging.
 	svc = service.ErrorLoggingMiddleware(logger)(svc)    // Setup error logging.
 	svc = service.RecoveringMiddleware(errorLogger)(svc) // Setup service recovering.
@@ -40,7 +41,7 @@ func main() {
 	endpoints := transport.Endpoints(svc)
 	endpoints = transport.TraceServerEndpoints(endpoints, opentracinggo.NoopTracer{}) // TODO: Add tracer
 
-	httpAddr := ":8081" // TODO: use normal address
+	httpAddr := ":8081"
 	// Start http server.
 	g.Go(func() error {
 		return ServeHTTP(ctx, &endpoints, httpAddr, log.With(logger, "transport", "HTTP"))

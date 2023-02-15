@@ -9,6 +9,7 @@ import (
 	service "esgrs/data_collection_service/service"
 	transport "esgrs/data_collection_service/transport"
 	http "esgrs/data_collection_service/transport/http"
+	"esgrs/pkg/tracer"
 	"fmt"
 	log "github.com/go-kit/kit/log"
 	opentracinggo "github.com/opentracing/opentracing-go"
@@ -31,17 +32,19 @@ func main() {
 		return InterruptHandler(ctx)
 	})
 
-	var svc datacollectionservice.DataCollectionService // TODO: = service.NewDataCollectionService () // Create new service.
+	tracerJaeger, _ := tracer.ProvideTracer("data_collection_service")
+
+	var svc datacollectionservice.DataCollectionService
 	svc = int_service.NewDataCollectionService(
-		"host=esgrs_postgres user=esgrs dbname=esgrs sslmode=esgrs password=12345678")
+		"host=esgrs_postgres user=esgrs dbname=esgrs sslmode=disable password=12345678")
 	svc = service.LoggingMiddleware(logger)(svc)         // Setup service logging.
 	svc = service.ErrorLoggingMiddleware(logger)(svc)    // Setup error logging.
 	svc = service.RecoveringMiddleware(errorLogger)(svc) // Setup service recovering.
 
 	endpoints := transport.Endpoints(svc)
-	endpoints = transport.TraceServerEndpoints(endpoints, opentracinggo.NoopTracer{}) // TODO: Add tracer
+	endpoints = transport.TraceServerEndpoints(endpoints, tracerJaeger) // TODO: Add tracer
 
-	httpAddr := ":8080" // TODO: use normal address
+	httpAddr := ":8080"
 	// Start http server.
 	g.Go(func() error {
 		return ServeHTTP(ctx, &endpoints, httpAddr, log.With(logger, "transport", "HTTP"))

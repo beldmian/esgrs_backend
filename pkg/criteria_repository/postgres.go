@@ -10,6 +10,14 @@ type CriteriaRepositoryPostgres struct {
 	db *gorm.DB
 }
 
+func (c CriteriaRepositoryPostgres) GetCriteriaByCriteriaID(id int) (*types.CriteriaData, error) {
+	var criteria types.CriteriaData
+	if err := c.db.Where("criteria_id =?", id).Find(&criteria).Error; err != nil {
+		return nil, err
+	}
+	return &criteria, nil
+}
+
 func (c CriteriaRepositoryPostgres) GetCriteria(id int) (*types.CriteriaData, error) {
 	var criteria types.CriteriaData
 	if err := c.db.Where("id =?", id).Find(&criteria).Error; err != nil {

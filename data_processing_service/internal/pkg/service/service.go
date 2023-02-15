@@ -3,11 +3,20 @@ package int_service
 import (
 	"context"
 	transporthttp "esgrs/data_collection_service/transport/http"
+	"esgrs/pkg/criteria_repository"
 	"esgrs/pkg/types"
 	"net/url"
 )
 
-type DataProcessingServiceImplementation struct{}
+type DataProcessingServiceImplementation struct {
+	criteriaRepository criteria_repository.CriteriaRepository
+}
+
+func NewDataProcessingServiceImplementation(postgresConnectionURI string) *DataProcessingServiceImplementation {
+	return &DataProcessingServiceImplementation{
+		criteriaRepository: criteria_repository.NewCriteriaRepositoryPostgres(postgresConnectionURI),
+	}
+}
 
 func (svc DataProcessingServiceImplementation) GetProcessedData(ctx context.Context, companyID int) (result types.ESGRatingResult, err error) {
 	apiURL, _ := url.Parse("http://data_collection_service:8080/")
@@ -32,9 +41,14 @@ func (svc DataProcessingServiceImplementation) GetProcessedData(ctx context.Cont
 		for _, weight := range category.CriteriaWeights {
 			if criteria.CriteriaID == weight.CriteriaID {
 				result.Rating += float64(scoreOut) * weight.Weight
+				criteriaData, err := svc.criteriaRepository.GetCriteriaByCriteriaID(int(criteria.CriteriaID))
+				if err != nil {
+					return result, err
+				}
 				result.CriteriaScores = append(result.CriteriaScores, types.CriteriaScore{
 					Score:          scoreOut,
 					CriteriaWeight: weight,
+					CriteriaData:   *criteriaData,
 				})
 				switch criteria.CriteriaType {
 				case types.ECriteria:
