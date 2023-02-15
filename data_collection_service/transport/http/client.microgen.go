@@ -13,6 +13,30 @@ import (
 
 func NewHTTPClient(u *url.URL, opts ...httpkit.ClientOption) transport.EndpointsSet {
 	return transport.EndpointsSet{
+		CreateCategoryEndpoint: httpkit.NewClient(
+			"POST", u,
+			_Encode_CreateCategory_Request,
+			_Decode_CreateCategory_Response,
+			opts...,
+		).Endpoint(),
+		CreateCompanyEndpoint: httpkit.NewClient(
+			"POST", u,
+			_Encode_CreateCompany_Request,
+			_Decode_CreateCompany_Response,
+			opts...,
+		).Endpoint(),
+		GetCategoriesEndpoint: httpkit.NewClient(
+			"POST", u,
+			_Encode_GetCategories_Request,
+			_Decode_GetCategories_Response,
+			opts...,
+		).Endpoint(),
+		GetCategoryDataEndpoint: httpkit.NewClient(
+			"POST", u,
+			_Encode_GetCategoryData_Request,
+			_Decode_GetCategoryData_Response,
+			opts...,
+		).Endpoint(),
 		GetCompanyByIDEndpoint: httpkit.NewClient(
 			"POST", u,
 			_Encode_GetCompanyByID_Request,

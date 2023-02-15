@@ -12,9 +12,13 @@ import (
 // TraceClientEndpoints is used for tracing endpoints on client side.
 func TraceClientEndpoints(endpoints EndpointsSet, tracer opentracinggo.Tracer) EndpointsSet {
 	return EndpointsSet{
-		GetCompanyByIDEndpoint: opentracing.TraceClient(tracer, "GetCompanyByID")(endpoints.GetCompanyByIDEndpoint),
-		GetCompanyListEndpoint: opentracing.TraceClient(tracer, "GetCompanyList")(endpoints.GetCompanyListEndpoint),
-		GetRawDataEndpoint:     opentracing.TraceClient(tracer, "GetRawData")(endpoints.GetRawDataEndpoint),
+		CreateCategoryEndpoint:  opentracing.TraceClient(tracer, "CreateCategory")(endpoints.CreateCategoryEndpoint),
+		CreateCompanyEndpoint:   opentracing.TraceClient(tracer, "CreateCompany")(endpoints.CreateCompanyEndpoint),
+		GetCategoriesEndpoint:   opentracing.TraceClient(tracer, "GetCategories")(endpoints.GetCategoriesEndpoint),
+		GetCategoryDataEndpoint: opentracing.TraceClient(tracer, "GetCategoryData")(endpoints.GetCategoryDataEndpoint),
+		GetCompanyByIDEndpoint:  opentracing.TraceClient(tracer, "GetCompanyByID")(endpoints.GetCompanyByIDEndpoint),
+		GetCompanyListEndpoint:  opentracing.TraceClient(tracer, "GetCompanyList")(endpoints.GetCompanyListEndpoint),
+		GetRawDataEndpoint:      opentracing.TraceClient(tracer, "GetRawData")(endpoints.GetRawDataEndpoint),
 	}
 }
 
@@ -43,4 +47,40 @@ func (set EndpointsSet) GetCompanyList(arg0 context.Context) (res0 []types.Compa
 		return
 	}
 	return response.(*GetCompanyListResponse).Companies, res1
+}
+
+func (set EndpointsSet) GetCategories(arg0 context.Context) (res0 []types.Category, res1 error) {
+	request := GetCategoriesRequest{}
+	response, res1 := set.GetCategoriesEndpoint(arg0, &request)
+	if res1 != nil {
+		return
+	}
+	return response.(*GetCategoriesResponse).Categories, res1
+}
+
+func (set EndpointsSet) GetCategoryData(arg0 context.Context, arg1 int) (res0 types.Category, res1 error) {
+	request := GetCategoryDataRequest{CategoryID: arg1}
+	response, res1 := set.GetCategoryDataEndpoint(arg0, &request)
+	if res1 != nil {
+		return
+	}
+	return response.(*GetCategoryDataResponse).Category, res1
+}
+
+func (set EndpointsSet) CreateCategory(arg0 context.Context, arg1 types.Category) (res0 int, res1 error) {
+	request := CreateCategoryRequest{Category: arg1}
+	response, res1 := set.CreateCategoryEndpoint(arg0, &request)
+	if res1 != nil {
+		return
+	}
+	return response.(*CreateCategoryResponse).Id, res1
+}
+
+func (set EndpointsSet) CreateCompany(arg0 context.Context, arg1 types.Company) (res0 int, res1 error) {
+	request := CreateCompanyRequest{Company: arg1}
+	response, res1 := set.CreateCompanyEndpoint(arg0, &request)
+	if res1 != nil {
+		return
+	}
+	return response.(*CreateCompanyResponse).Id, res1
 }

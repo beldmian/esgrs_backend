@@ -54,3 +54,43 @@ func (M recoveringMiddleware) GetCompanyList(ctx context.Context) (companies []t
 	}()
 	return M.next.GetCompanyList(ctx)
 }
+
+func (M recoveringMiddleware) GetCategories(ctx context.Context) (categories []types.Category, err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			M.logger.Log("method", "GetCategories", "message", r)
+			err = fmt.Errorf("%v", r)
+		}
+	}()
+	return M.next.GetCategories(ctx)
+}
+
+func (M recoveringMiddleware) GetCategoryData(ctx context.Context, categoryID int) (category types.Category, err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			M.logger.Log("method", "GetCategoryData", "message", r)
+			err = fmt.Errorf("%v", r)
+		}
+	}()
+	return M.next.GetCategoryData(ctx, categoryID)
+}
+
+func (M recoveringMiddleware) CreateCategory(ctx context.Context, category types.Category) (id int, err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			M.logger.Log("method", "CreateCategory", "message", r)
+			err = fmt.Errorf("%v", r)
+		}
+	}()
+	return M.next.CreateCategory(ctx, category)
+}
+
+func (M recoveringMiddleware) CreateCompany(ctx context.Context, company types.Company) (id int, err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			M.logger.Log("method", "CreateCompany", "message", r)
+			err = fmt.Errorf("%v", r)
+		}
+	}()
+	return M.next.CreateCompany(ctx, company)
+}

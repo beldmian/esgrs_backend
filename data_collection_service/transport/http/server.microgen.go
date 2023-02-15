@@ -35,5 +35,33 @@ func NewHTTPHandler(endpoints *transport.EndpointsSet, logger log.Logger, tracer
 			_Encode_GetCompanyList_Response,
 			append(opts, http.ServerBefore(
 				opentracing.HTTPToContext(tracer, "GetCompanyList", logger)))...))
+	mux.Methods("POST").Path("/get-categories").Handler(
+		http.NewServer(
+			endpoints.GetCategoriesEndpoint,
+			_Decode_GetCategories_Request,
+			_Encode_GetCategories_Response,
+			append(opts, http.ServerBefore(
+				opentracing.HTTPToContext(tracer, "GetCategories", logger)))...))
+	mux.Methods("POST").Path("/get-category-data").Handler(
+		http.NewServer(
+			endpoints.GetCategoryDataEndpoint,
+			_Decode_GetCategoryData_Request,
+			_Encode_GetCategoryData_Response,
+			append(opts, http.ServerBefore(
+				opentracing.HTTPToContext(tracer, "GetCategoryData", logger)))...))
+	mux.Methods("POST").Path("/create-category").Handler(
+		http.NewServer(
+			endpoints.CreateCategoryEndpoint,
+			_Decode_CreateCategory_Request,
+			_Encode_CreateCategory_Response,
+			append(opts, http.ServerBefore(
+				opentracing.HTTPToContext(tracer, "CreateCategory", logger)))...))
+	mux.Methods("POST").Path("/create-company").Handler(
+		http.NewServer(
+			endpoints.CreateCompanyEndpoint,
+			_Decode_CreateCompany_Request,
+			_Encode_CreateCompany_Response,
+			append(opts, http.ServerBefore(
+				opentracing.HTTPToContext(tracer, "CreateCompany", logger)))...))
 	return mux
 }

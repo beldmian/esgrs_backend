@@ -12,18 +12,26 @@ import (
 
 func Endpoints(svc datacollectionservice.DataCollectionService) EndpointsSet {
 	return EndpointsSet{
-		GetCompanyByIDEndpoint: GetCompanyByIDEndpoint(svc),
-		GetCompanyListEndpoint: GetCompanyListEndpoint(svc),
-		GetRawDataEndpoint:     GetRawDataEndpoint(svc),
+		CreateCategoryEndpoint:  CreateCategoryEndpoint(svc),
+		CreateCompanyEndpoint:   CreateCompanyEndpoint(svc),
+		GetCategoriesEndpoint:   GetCategoriesEndpoint(svc),
+		GetCategoryDataEndpoint: GetCategoryDataEndpoint(svc),
+		GetCompanyByIDEndpoint:  GetCompanyByIDEndpoint(svc),
+		GetCompanyListEndpoint:  GetCompanyListEndpoint(svc),
+		GetRawDataEndpoint:      GetRawDataEndpoint(svc),
 	}
 }
 
 // TraceServerEndpoints is used for tracing endpoints on server side.
 func TraceServerEndpoints(endpoints EndpointsSet, tracer opentracinggo.Tracer) EndpointsSet {
 	return EndpointsSet{
-		GetCompanyByIDEndpoint: opentracing.TraceServer(tracer, "GetCompanyByID")(endpoints.GetCompanyByIDEndpoint),
-		GetCompanyListEndpoint: opentracing.TraceServer(tracer, "GetCompanyList")(endpoints.GetCompanyListEndpoint),
-		GetRawDataEndpoint:     opentracing.TraceServer(tracer, "GetRawData")(endpoints.GetRawDataEndpoint),
+		CreateCategoryEndpoint:  opentracing.TraceServer(tracer, "CreateCategory")(endpoints.CreateCategoryEndpoint),
+		CreateCompanyEndpoint:   opentracing.TraceServer(tracer, "CreateCompany")(endpoints.CreateCompanyEndpoint),
+		GetCategoriesEndpoint:   opentracing.TraceServer(tracer, "GetCategories")(endpoints.GetCategoriesEndpoint),
+		GetCategoryDataEndpoint: opentracing.TraceServer(tracer, "GetCategoryData")(endpoints.GetCategoryDataEndpoint),
+		GetCompanyByIDEndpoint:  opentracing.TraceServer(tracer, "GetCompanyByID")(endpoints.GetCompanyByIDEndpoint),
+		GetCompanyListEndpoint:  opentracing.TraceServer(tracer, "GetCompanyList")(endpoints.GetCompanyListEndpoint),
+		GetRawDataEndpoint:      opentracing.TraceServer(tracer, "GetRawData")(endpoints.GetRawDataEndpoint),
 	}
 }
 
@@ -47,5 +55,36 @@ func GetCompanyListEndpoint(svc datacollectionservice.DataCollectionService) end
 	return func(arg0 context.Context, request interface{}) (interface{}, error) {
 		res0, res1 := svc.GetCompanyList(arg0)
 		return &GetCompanyListResponse{Companies: res0}, res1
+	}
+}
+
+func GetCategoriesEndpoint(svc datacollectionservice.DataCollectionService) endpoint.Endpoint {
+	return func(arg0 context.Context, request interface{}) (interface{}, error) {
+		res0, res1 := svc.GetCategories(arg0)
+		return &GetCategoriesResponse{Categories: res0}, res1
+	}
+}
+
+func GetCategoryDataEndpoint(svc datacollectionservice.DataCollectionService) endpoint.Endpoint {
+	return func(arg0 context.Context, request interface{}) (interface{}, error) {
+		req := request.(*GetCategoryDataRequest)
+		res0, res1 := svc.GetCategoryData(arg0, req.CategoryID)
+		return &GetCategoryDataResponse{Category: res0}, res1
+	}
+}
+
+func CreateCategoryEndpoint(svc datacollectionservice.DataCollectionService) endpoint.Endpoint {
+	return func(arg0 context.Context, request interface{}) (interface{}, error) {
+		req := request.(*CreateCategoryRequest)
+		res0, res1 := svc.CreateCategory(arg0, req.Category)
+		return &CreateCategoryResponse{Id: res0}, res1
+	}
+}
+
+func CreateCompanyEndpoint(svc datacollectionservice.DataCollectionService) endpoint.Endpoint {
+	return func(arg0 context.Context, request interface{}) (interface{}, error) {
+		req := request.(*CreateCompanyRequest)
+		res0, res1 := svc.CreateCompany(arg0, req.Company)
+		return &CreateCompanyResponse{Id: res0}, res1
 	}
 }

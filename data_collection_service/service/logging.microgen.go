@@ -63,6 +63,57 @@ func (M loggingMiddleware) GetCompanyList(arg0 context.Context) (res0 []types.Co
 	return M.next.GetCompanyList(arg0)
 }
 
+func (M loggingMiddleware) GetCategories(arg0 context.Context) (res0 []types.Category, res1 error) {
+	defer func(begin time.Time) {
+		M.logger.Log(
+			"method", "GetCategories",
+			"message", "GetCategories called",
+			"response", logGetCategoriesResponse{Categories: res0},
+			"err", res1,
+			"took", time.Since(begin))
+	}(time.Now())
+	return M.next.GetCategories(arg0)
+}
+
+func (M loggingMiddleware) GetCategoryData(arg0 context.Context, arg1 int) (res0 types.Category, res1 error) {
+	defer func(begin time.Time) {
+		M.logger.Log(
+			"method", "GetCategoryData",
+			"message", "GetCategoryData called",
+			"request", logGetCategoryDataRequest{CategoryID: arg1},
+			"response", logGetCategoryDataResponse{Category: res0},
+			"err", res1,
+			"took", time.Since(begin))
+	}(time.Now())
+	return M.next.GetCategoryData(arg0, arg1)
+}
+
+func (M loggingMiddleware) CreateCategory(arg0 context.Context, arg1 types.Category) (res0 int, res1 error) {
+	defer func(begin time.Time) {
+		M.logger.Log(
+			"method", "CreateCategory",
+			"message", "CreateCategory called",
+			"request", logCreateCategoryRequest{Category: arg1},
+			"response", logCreateCategoryResponse{Id: res0},
+			"err", res1,
+			"took", time.Since(begin))
+	}(time.Now())
+	return M.next.CreateCategory(arg0, arg1)
+}
+
+func (M loggingMiddleware) CreateCompany(arg0 context.Context, arg1 types.Company) (res0 int, res1 error) {
+	defer func(begin time.Time) {
+		M.logger.Log(
+			"method", "CreateCompany",
+			"message", "CreateCompany called",
+			"request", logCreateCompanyRequest{Company: arg1},
+			"response", logCreateCompanyResponse{Id: res0},
+			"err", res1,
+			"took", time.Since(begin))
+	}(time.Now())
+	return M.next.CreateCompany(arg0, arg1)
+}
+
 type (
 	logGetCompanyByIDRequest struct {
 		Id int
@@ -78,5 +129,26 @@ type (
 	}
 	logGetCompanyListResponse struct {
 		Companies []types.Company
+	}
+	logGetCategoriesResponse struct {
+		Categories []types.Category
+	}
+	logGetCategoryDataRequest struct {
+		CategoryID int
+	}
+	logGetCategoryDataResponse struct {
+		Category types.Category
+	}
+	logCreateCategoryRequest struct {
+		Category types.Category
+	}
+	logCreateCategoryResponse struct {
+		Id int
+	}
+	logCreateCompanyRequest struct {
+		Company types.Company
+	}
+	logCreateCompanyResponse struct {
+		Id int
 	}
 )

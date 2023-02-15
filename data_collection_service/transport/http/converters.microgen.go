@@ -89,3 +89,87 @@ func _Encode_GetRawData_Response(ctx context.Context, w http.ResponseWriter, res
 func _Encode_GetCompanyList_Response(ctx context.Context, w http.ResponseWriter, response interface{}) error {
 	return CommonHTTPResponseEncoder(ctx, w, response)
 }
+
+func _Decode_GetCategoryData_Request(_ context.Context, r *http.Request) (interface{}, error) {
+	var req transport.GetCategoryDataRequest
+	err := json.NewDecoder(r.Body).Decode(&req)
+	return &req, err
+}
+
+func _Decode_GetCategoryData_Response(_ context.Context, r *http.Response) (interface{}, error) {
+	var resp transport.GetCategoryDataResponse
+	err := json.NewDecoder(r.Body).Decode(&resp)
+	return &resp, err
+}
+
+func _Encode_GetCategoryData_Request(ctx context.Context, r *http.Request, request interface{}) error {
+	r.URL.Path = path.Join(r.URL.Path, "get-category-data")
+	return CommonHTTPRequestEncoder(ctx, r, request)
+}
+
+func _Encode_GetCategoryData_Response(ctx context.Context, w http.ResponseWriter, response interface{}) error {
+	return CommonHTTPResponseEncoder(ctx, w, response)
+}
+
+func _Decode_GetCategories_Request(_ context.Context, r *http.Request) (interface{}, error) {
+	var req transport.GetCategoriesRequest
+	err := json.NewDecoder(r.Body).Decode(&req)
+	return &req, err
+}
+
+func _Decode_CreateCategory_Request(_ context.Context, r *http.Request) (interface{}, error) {
+	var req transport.CreateCategoryRequest
+	err := json.NewDecoder(r.Body).Decode(&req)
+	return &req, err
+}
+
+func _Decode_CreateCompany_Request(_ context.Context, r *http.Request) (interface{}, error) {
+	var req transport.CreateCompanyRequest
+	err := json.NewDecoder(r.Body).Decode(&req)
+	return &req, err
+}
+
+func _Decode_GetCategories_Response(_ context.Context, r *http.Response) (interface{}, error) {
+	var resp transport.GetCategoriesResponse
+	err := json.NewDecoder(r.Body).Decode(&resp)
+	return &resp, err
+}
+
+func _Decode_CreateCategory_Response(_ context.Context, r *http.Response) (interface{}, error) {
+	var resp transport.CreateCategoryResponse
+	err := json.NewDecoder(r.Body).Decode(&resp)
+	return &resp, err
+}
+
+func _Decode_CreateCompany_Response(_ context.Context, r *http.Response) (interface{}, error) {
+	var resp transport.CreateCompanyResponse
+	err := json.NewDecoder(r.Body).Decode(&resp)
+	return &resp, err
+}
+
+func _Encode_GetCategories_Request(ctx context.Context, r *http.Request, request interface{}) error {
+	r.URL.Path = path.Join(r.URL.Path, "get-categories")
+	return CommonHTTPRequestEncoder(ctx, r, request)
+}
+
+func _Encode_CreateCategory_Request(ctx context.Context, r *http.Request, request interface{}) error {
+	r.URL.Path = path.Join(r.URL.Path, "create-category")
+	return CommonHTTPRequestEncoder(ctx, r, request)
+}
+
+func _Encode_CreateCompany_Request(ctx context.Context, r *http.Request, request interface{}) error {
+	r.URL.Path = path.Join(r.URL.Path, "create-company")
+	return CommonHTTPRequestEncoder(ctx, r, request)
+}
+
+func _Encode_GetCategories_Response(ctx context.Context, w http.ResponseWriter, response interface{}) error {
+	return CommonHTTPResponseEncoder(ctx, w, response)
+}
+
+func _Encode_CreateCategory_Response(ctx context.Context, w http.ResponseWriter, response interface{}) error {
+	return CommonHTTPResponseEncoder(ctx, w, response)
+}
+
+func _Encode_CreateCompany_Response(ctx context.Context, w http.ResponseWriter, response interface{}) error {
+	return CommonHTTPResponseEncoder(ctx, w, response)
+}

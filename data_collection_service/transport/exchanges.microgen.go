@@ -24,4 +24,31 @@ type (
 	GetCompanyListResponse struct {
 		Companies []types.Company `json:"companies"`
 	}
+
+	// Formal exchange type, please do not delete.
+	GetCategoriesRequest  struct{}
+	GetCategoriesResponse struct {
+		Categories []types.Category `json:"categories"`
+	}
+
+	GetCategoryDataRequest struct {
+		CategoryID int `json:"category_id"`
+	}
+	GetCategoryDataResponse struct {
+		Category types.Category `json:"category"`
+	}
+
+	CreateCategoryRequest struct {
+		Category types.Category `json:"category"`
+	}
+	CreateCategoryResponse struct {
+		Id int `json:"id"`
+	}
+
+	CreateCompanyRequest struct {
+		Company types.Company `json:"company"`
+	}
+	CreateCompanyResponse struct {
+		Id int `json:"id"`
+	}
 )

@@ -32,7 +32,8 @@ func main() {
 	})
 
 	var svc datacollectionservice.DataCollectionService // TODO: = service.NewDataCollectionService () // Create new service.
-	svc = int_service.DataCollectionServiceImplementation{}
+	svc = int_service.NewDataCollectionService(
+		"host=esgrs_postgres user=esgrs dbname=esgrs sslmode=esgrs password=12345678")
 	svc = service.LoggingMiddleware(logger)(svc)         // Setup service logging.
 	svc = service.ErrorLoggingMiddleware(logger)(svc)    // Setup error logging.
 	svc = service.RecoveringMiddleware(errorLogger)(svc) // Setup service recovering.

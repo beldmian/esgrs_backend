@@ -6,6 +6,8 @@ networks:
 services:
   data_collection_service:
     container_name: data_collection_service
+    depends_on:
+      - postgres
     build:
       context: .
       dockerfile: deploy/data_collection_service.Dockerfile
@@ -15,6 +17,8 @@ services:
       - internal
   data_processing_service:
     container_name: data_processing_service
+    depends_on:
+      - postgres
     build:
       context: .
       dockerfile: deploy/data_processing_service.Dockerfile
@@ -24,6 +28,8 @@ services:
       - internal
   reporting_service:
     container_name: reporting_service
+    depends_on:
+      - postgres
     build:
       context: .
       dockerfile: deploy/reporting_service.Dockerfile
@@ -33,10 +39,26 @@ services:
       - internal
   visualization_service:
     container_name: visualization_service
+    depends_on:
+      - postgres
     build:
       context: .
       dockerfile: deploy/visualization_service.Dockerfile
     ports:
       - "8083:8083"
+    networks:
+      - internal
+  postgres:
+    container_name: "esgrs_postgres"
+    image: postgres:13.3
+    environment:
+      POSTGRES_DB: "esgrs"
+      POSTGRES_USER: "esgrs"
+      POSTGRES_PASSWORD: "12345678"
+    volumes:
+      - ./deploy/migrations:/docker-entrypoint-initdb.d
+      - ./deploy/pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
     networks:
       - internal

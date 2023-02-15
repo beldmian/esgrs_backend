@@ -16,4 +16,16 @@ type DataCollectionService interface {
 
 	// GetCompanyList returns a list of companies to be processed
 	GetCompanyList(ctx context.Context) (companies []types.Company, err error)
+
+	// GetCategories returns a list of categories to be processed
+	GetCategories(ctx context.Context) (categories []types.Category, err error)
+
+	// GetCategoryData returns data of category
+	GetCategoryData(ctx context.Context, categoryID int) (category types.Category, err error)
+
+	// CreateCategory creates a new category
+	CreateCategory(ctx context.Context, category types.Category) (id int, err error)
+
+	// CreateCompany creates a new company
+	CreateCompany(ctx context.Context, company types.Company) (id int, err error)
 }

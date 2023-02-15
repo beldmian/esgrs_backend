@@ -20,16 +20,24 @@ type ManyToManyStreamEndpoint func(stream interface{}) error
 type ManyToOneStreamEndpoint func(stream interface{}) error
 
 type EndpointsSet struct {
-	GetCompanyByIDEndpoint endpoint.Endpoint
-	GetRawDataEndpoint     endpoint.Endpoint
-	GetCompanyListEndpoint endpoint.Endpoint
+	GetCompanyByIDEndpoint  endpoint.Endpoint
+	GetRawDataEndpoint      endpoint.Endpoint
+	GetCompanyListEndpoint  endpoint.Endpoint
+	GetCategoriesEndpoint   endpoint.Endpoint
+	GetCategoryDataEndpoint endpoint.Endpoint
+	CreateCategoryEndpoint  endpoint.Endpoint
+	CreateCompanyEndpoint   endpoint.Endpoint
 }
 
 func InstrumentingEndpoints(endpoints EndpointsSet, tracer opentracinggo.Tracer) EndpointsSet {
 	return EndpointsSet{
-		GetCompanyByIDEndpoint: opentracing.TraceServer(tracer, "GetCompanyByID")(endpoints.GetCompanyByIDEndpoint),
-		GetCompanyListEndpoint: opentracing.TraceServer(tracer, "GetCompanyList")(endpoints.GetCompanyListEndpoint),
-		GetRawDataEndpoint:     opentracing.TraceServer(tracer, "GetRawData")(endpoints.GetRawDataEndpoint),
+		CreateCategoryEndpoint:  opentracing.TraceServer(tracer, "CreateCategory")(endpoints.CreateCategoryEndpoint),
+		CreateCompanyEndpoint:   opentracing.TraceServer(tracer, "CreateCompany")(endpoints.CreateCompanyEndpoint),
+		GetCategoriesEndpoint:   opentracing.TraceServer(tracer, "GetCategories")(endpoints.GetCategoriesEndpoint),
+		GetCategoryDataEndpoint: opentracing.TraceServer(tracer, "GetCategoryData")(endpoints.GetCategoryDataEndpoint),
+		GetCompanyByIDEndpoint:  opentracing.TraceServer(tracer, "GetCompanyByID")(endpoints.GetCompanyByIDEndpoint),
+		GetCompanyListEndpoint:  opentracing.TraceServer(tracer, "GetCompanyList")(endpoints.GetCompanyListEndpoint),
+		GetRawDataEndpoint:      opentracing.TraceServer(tracer, "GetRawData")(endpoints.GetRawDataEndpoint),
 	}
 }
 

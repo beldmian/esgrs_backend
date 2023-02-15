@@ -50,3 +50,39 @@ func (M errorLoggingMiddleware) GetCompanyList(ctx context.Context) (companies [
 	}()
 	return M.next.GetCompanyList(ctx)
 }
+
+func (M errorLoggingMiddleware) GetCategories(ctx context.Context) (categories []types.Category, err error) {
+	defer func() {
+		if err != nil {
+			M.logger.Log("method", "GetCategories", "message", err)
+		}
+	}()
+	return M.next.GetCategories(ctx)
+}
+
+func (M errorLoggingMiddleware) GetCategoryData(ctx context.Context, categoryID int) (category types.Category, err error) {
+	defer func() {
+		if err != nil {
+			M.logger.Log("method", "GetCategoryData", "message", err)
+		}
+	}()
+	return M.next.GetCategoryData(ctx, categoryID)
+}
+
+func (M errorLoggingMiddleware) CreateCategory(ctx context.Context, category types.Category) (id int, err error) {
+	defer func() {
+		if err != nil {
+			M.logger.Log("method", "CreateCategory", "message", err)
+		}
+	}()
+	return M.next.CreateCategory(ctx, category)
+}
+
+func (M errorLoggingMiddleware) CreateCompany(ctx context.Context, company types.Company) (id int, err error) {
+	defer func() {
+		if err != nil {
+			M.logger.Log("method", "CreateCompany", "message", err)
+		}
+	}()
+	return M.next.CreateCompany(ctx, company)
+}
